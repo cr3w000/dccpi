@@ -26,8 +26,8 @@
 extern void delayMicrosecondsHard (unsigned int howLong);
 
 // pin numbering follows wiringPi notation
-const int dataPin = 0;
-const int brakePin = 2;
+const int dataPin = 22;
+const int brakePin = 23;
 
 static PyObject * dcc_rpi_encoder_c_send_bit_array(PyObject *self, PyObject *args){
     char const *bit_array;
