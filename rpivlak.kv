@@ -1,0 +1,84 @@
+
+#:kivy 1.0.9
+
+<Main_Screen>:    
+    # ... (canvas and Labels)
+#    canvas:
+#        Rectangle:
+#            pos: self.center_x - 5, 0
+#            size: 10, self.height
+
+
+      
+    Label:
+        font_size: 20  
+        x: 0
+        y: root.height - self.height
+        text: "RPiVlak 1.0"
+        size: self.texture_size 
+    Label:
+        font_size: 12  
+        x: root.width - self.width
+        y: 0
+        text: "© 2021 Tom Bartulec"
+        size: self.texture_size
+
+    GridLayout:
+        cols: 4
+        y: 20
+        id: button_grid
+        size_hint_y: None
+        spacing: 40,70
+        height: 70
+        width: root.width
+        size_hint: [.9, .9]
+
+        ToggleButton:
+            group: "jizda"
+            state: "normal"
+            font_size: 20
+            size_hint: 0.25,1
+            text: 'End to End'
+            background_color: "green"
+#            on_touch_down: if self.collide_point(640 - touch.pos[0],480 - touch.pos[1]):
+
+            on_press: print("End_to_end")
+            on_release: print("End release")
+            on_state:
+                print("End_to_end current state is {}".format(self.state))
+ 
+        Button:
+            size_hint: 0.25,1
+            font_size: 20
+            text: 'Go'
+#            on_touch_down: if self.collide_point(640 - touch.pos[0],480 - touch.pos[1]):
+            on_press: print("Go")
+            on_release: print("ahhh")
+            on_state:
+                print("my current state is {}".format(self.state))
+
+        Button:
+            size_hint: 0.25,1
+            font_size: 20
+            text: 'Reverse'
+#            on_touch_down: if self.collide_point(640 - touch.pos[0],480 - touch.pos[1]):
+            on_press: print("reverse")
+            on_release: print("ahhh")
+            on_state:
+                print("my current state is {}".format(self.state))
+
+
+        ToggleButton:
+            group: "jizda"
+            state: "down"
+            size_hint: 0.25,1
+            font_size: 20
+            text: '! STOP !'
+            color: "black"
+            background_color: "red"
+#            on_touch_down: if self.collide_point(640 - touch.pos[0],480 - touch.pos[1]):
+            on_press: print("STOP")
+            on_release: print("Stop released")
+            on_state:
+                print("STOP current state is {}".format(self.state))
+

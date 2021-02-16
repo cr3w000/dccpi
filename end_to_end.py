@@ -24,7 +24,7 @@ while True:
   try:
     modra.speed=16
     print("Forward \n")
-    time.sleep(12)
+    time.sleep(11.5)
     modra.speed=0
     print("Stop \n")
     time.sleep(10)
@@ -32,7 +32,7 @@ while True:
     time.sleep(.1)
     modra.speed=16
     print("Reverse \n")
-    time.sleep(12)
+    time.sleep(11.5)
     modra.speed=0
     print("Stop \n")
     time.sleep(10)
