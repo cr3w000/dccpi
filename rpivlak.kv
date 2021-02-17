@@ -1,7 +1,20 @@
 
 #:kivy 1.0.9
 
+<Semafor>:
+    size: 60, 60 
+    canvas:
+        Color:
+            rgba: self.color
+        Ellipse:
+            pos: self.pos
+            size: self.size
+
 <Main_Screen>:    
+    buttonEtE: button_ete
+    buttonStop: button_stop
+    semafor: semafor
+
     # ... (canvas and Labels)
 #    canvas:
 #        Rectangle:
@@ -23,6 +36,11 @@
         text: "© 2021 Tom Bartulec"
         size: self.texture_size
 
+    Semafor:
+        id: semafor
+        right: root.right - 20
+        top: root.top - 20
+     
     GridLayout:
         cols: 4
         y: 20
@@ -34,7 +52,8 @@
         size_hint: [.9, .9]
 
         ToggleButton:
-            group: "jizda"
+            id: button_ete
+#            group: "jizda"
             state: "normal"
             font_size: 20
             size_hint: 0.25,1
@@ -42,7 +61,7 @@
             background_color: "green"
 #            on_touch_down: if self.collide_point(640 - touch.pos[0],480 - touch.pos[1]):
 
-            on_press: print("End_to_end")
+            on_press: root.train_ete()
             on_release: print("End release")
             on_state:
                 print("End_to_end current state is {}".format(self.state))
@@ -68,16 +87,17 @@
                 print("my current state is {}".format(self.state))
 
 
-        ToggleButton:
-            group: "jizda"
-            state: "down"
+        Button:
+            id: button_stop
+#            group: "jizda"
+#            state: "down"
             size_hint: 0.25,1
             font_size: 20
             text: '! STOP !'
             color: "black"
             background_color: "red"
 #            on_touch_down: if self.collide_point(640 - touch.pos[0],480 - touch.pos[1]):
-            on_press: print("STOP")
+            on_press: root.train_stop()
             on_release: print("Stop released")
             on_state:
                 print("STOP current state is {}".format(self.state))

@@ -1,52 +1,65 @@
 import time
-
 from dccpi import *
-e = DCCRPiEncoder()
-controller = DCCController(e)  # Create the DCC controller with the RPi encodermodra
-modra = DCCLocomotive("DCC3", 3)  # Create locos, args: Name, DCC Address (see DCCLocomotive class)
 
-controller.register(modra)        # Register locos on the controller
-# DCC6 registered on address #6
-controller.start()             # Start the controller. Removes brake signal
-# Starting DCC Controller      # and starts sending bits to the booster
-#l1.reverse()                   # Change direction bit
-#l2.fl = True                   # Change fl function bit
-#l3.fl = True
-#l1.speed = 10                  # Change speed
-#l2.speed = 18
-#l3.speed = 23
-#l3.slower()                    # Reduce 1 speed step
-#l3.faster()                    # Increase 1 speed step
+class End_To_End():
 
-modra.fl = True
+    e = DCCRPiEncoder()
+    controller = DCCController(e)  # Create the DCC controller with the RPi encodermodra
+    modra = DCCLocomotive("DCC3", 3)  # Create locos, args: Name, DCC Address (see DCCLocomotive class)
 
-while True:
-  try:
-    modra.speed=16
-    print("Forward \n")
-    time.sleep(11.5)
-    modra.speed=0
-    print("Stop \n")
-    time.sleep(10)
-    modra.reverse()
-    time.sleep(.1)
-    modra.speed=16
-    print("Reverse \n")
-    time.sleep(11.5)
-    modra.speed=0
-    print("Stop \n")
-    time.sleep(10)
-    modra.reverse()
-    time.sleep(.1)
+    controller.register(modra)        # Register locos on the controller
+#    controller.start()             # Start the controller. Removes brake signal
+
+    isRunning = False
+
+    def lights_on(self):
+        self.modra.fl = True
+
+    def lights_off(self):
+        self.modra.fl = False
 
 
+    def run(self):
+        self.controller.start()             # Start the controller. Removes brake signal
+
+        self.isRunning = True
+        self.lights_on()
+
+        while self.isRunning:
+            try:
+                self.modra.speed=16
+                print("Forward \n")
+                time.sleep(11.5)
+                self.modra.speed=0
+                print("Stop \n")
+                time.sleep(10)
+                self.modra.reverse()
+                time.sleep(.1)
+                self.modra.speed=16
+                print("Reverse \n")
+                time.sleep(11.5)
+                self.modra.speed=0
+                print("Stop \n")
+                time.sleep(10)
+                self.modra.reverse()
+                time.sleep(.1)
+
+            except KeyboardInterrupt:
+                self.controller.stop()
+                break
+
+        self.controller.stop()              # IMPORTANT! Stop controller always. Emergency-stops
+        print("Controller stopped")
+
+    def gentle_stop(self):
+        self.lights_off()
+        self.isRunning = False
+
+    def emergency_stop(self):
+        self.controller.stop()
+        self.gentle_stop()
 
 
-  except KeyboardInterrupt:
-     controller.stop()
-     break
+if __name__ == '__main__':
+    End_To_End().run()
 
-
-
-controller.stop()              # IMPORTANT! Stop controller always. Emergency-stops
-# DCC Controller stopped       # all locos and enables brake signal on tracks
