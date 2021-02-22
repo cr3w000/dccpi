@@ -10,10 +10,19 @@
             pos: self.pos
             size: self.size
 
+<TextRow>:
+    Label:
+        font_size: 30
+        x: 5
+        size: self.texture_size
+        text: " "
+
 <Main_Screen>:    
     buttonEtE: button_ete
     buttonStop: button_stop
     semafor: semafor
+    train_status: train_status
+    train_distance: train_distance
 
     # ... (canvas and Labels)
 #    canvas:
@@ -35,6 +44,18 @@
         y: 0
         text: "© 2021 Tom Bartulec"
         size: self.texture_size
+
+    TextRow:
+        id: train_status
+        y: root.height - self.height - 50
+
+    Label:
+        font_size: 30
+        x: 5
+        size: self.texture_size
+        text: root.dist
+        id: train_distance
+        y: root.height - self.height - train_status.height - 100
 
     Semafor:
         id: semafor

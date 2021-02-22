@@ -1,5 +1,7 @@
 import time
 from dccpi import *
+import RPi.GPIO as GPIO
+GPIO.setmode(GPIO.BOARD)
 
 class End_To_End():
 
@@ -9,6 +11,13 @@ class End_To_End():
 
     controller.register(modra)        # Register locos on the controller
 #    controller.start()             # Start the controller. Removes brake signal
+
+    GPIO.setmode(GPIO.BOARD)
+    GPIO.setup(36, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
+    def my_callback(channel, *args):
+        print("Train detected")
+
 
     isRunning = False
 
@@ -24,10 +33,10 @@ class End_To_End():
 
         self.isRunning = True
         self.lights_on()
+        GPIO.add_event_detect(36, GPIO.RISING, callback=self.my_callback, bouncetime=1000)
 
         while self.isRunning:
             try:
-#                Main_Screen.train_status.text = "ON"
                 self.modra.speed=16
                 print("Forward \n")
                 time.sleep(11.5)
@@ -60,10 +69,6 @@ class End_To_End():
         self.controller.stop()
         self.gentle_stop()
 
-    def gentle_start(self):
-        self.controller.start()
-        self.lights_on()
-        self.isRunning = True
 
 if __name__ == '__main__':
     End_To_End().run()
