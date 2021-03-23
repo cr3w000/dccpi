@@ -2,7 +2,7 @@ from kivy.app import App
 from kivy.uix.widget import Widget
 from kivy.properties import (
     NumericProperty, ReferenceListProperty, ObjectProperty, ListProperty, StringProperty )
-from end_to_end import End_To_End
+from end_to_end_distance import End_To_End
 import ultrasonic_distance
 import threading
 import time
@@ -11,6 +11,10 @@ from kivy.clock import Clock
 #from kivy.clock import Clock
 e = End_To_End()
 t = threading.Thread(target=e.run, name='EtE run')
+t.daemon = True
+t.start()
+e.gentle_stop()
+
 
 class Distance():
     dist = 0
@@ -51,6 +55,7 @@ class Main_Screen(Widget):
     def update(self, *args):
         dist = str(round(d.measure()))
         self.train_distance.text = dist
+        e.update_dist(dist)
 
     def __init__(self, **kwargs):
         super(Main_Screen, self).__init__(**kwargs)
@@ -74,14 +79,11 @@ class Main_Screen(Widget):
             self.semafor.color = (1, 0, 0, 1)
         else:
             print("ETE DOWN")
-#            t = threading.Thread(target=self.e.run, name='EtE run')
             if(t.is_alive()):
                 print("Thread alive, only set running flag")
                 e.gentle_start()
             else:
-                t.daemon = True
-                t.start()
-            #self.e.run()
+                e.gentle_start()
             self.semafor.color = (0, 1, 0, 1)
 
 
