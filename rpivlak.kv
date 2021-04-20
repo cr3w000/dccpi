@@ -20,106 +20,199 @@
 <Main_Screen>:    
     buttonEtE: button_ete
     buttonStop: button_stop
+    buttonTrainScreen: button_train_screen
+    buttonSettingsScreen: button_settings_screen
     semafor: semafor
     train_status: train_status
     train_distance: train_distance
 
-    # ... (canvas and Labels)
-#    canvas:
-#        Rectangle:
-#            pos: self.center_x - 5, 0
-#            size: 10, self.height
+    Widget:      
+        Label:
+            font_size: 20  
+            x: 0
+            y: root.height - self.height
+            text: "RPiVlak 1.0"
+            size: self.texture_size 
+        Label:
+            font_size: 12  
+            x: root.width - self.width
+            y: 0
+            text: "© 2021 Tom Bartulec"
+            size: self.texture_size
 
+        TextRow:
+            id: train_status
+            y: root.height - self.height - 50
 
-      
-    Label:
-        font_size: 20  
-        x: 0
-        y: root.height - self.height
-        text: "RPiVlak 1.0"
-        size: self.texture_size 
-    Label:
-        font_size: 12  
-        x: root.width - self.width
-        y: 0
-        text: "© 2021 Tom Bartulec"
-        size: self.texture_size
+        Label:
+            font_size: 30
+            x: 5
+            size: self.texture_size
+            text: root.dist
+            id: train_distance
+            y: root.height - self.height - train_status.height - 100
 
-    TextRow:
-        id: train_status
-        y: root.height - self.height - 50
-
-    Label:
-        font_size: 30
-        x: 5
-        size: self.texture_size
-        text: root.dist
-        id: train_distance
-        y: root.height - self.height - train_status.height - 100
-
-    Semafor:
-        id: semafor
-        right: root.right - 20
-        top: root.top - 20
+        Semafor:
+            id: semafor
+            right: root.right - 20
+            top: root.top - 20
      
-    GridLayout:
-        cols: 4
-        y: 20
-        id: button_grid
-        size_hint_y: None
-        spacing: 40,70
-        height: 70
-        width: root.width
-        size_hint: [.9, .9]
+        GridLayout:
+            cols: 4
+            y: 20
+            id: button_grid
+            size_hint_y: None
+            spacing: 40,70
+            height: 70
+            width: root.width
+            size_hint: [.9, .9]
 
-        ToggleButton:
-            id: button_ete
-#            group: "jizda"
-            state: "normal"
+            ToggleButton:
+                id: button_ete
+                state: "normal"
+                font_size: 20
+                size_hint: 0.25,1
+                text: 'End to End'
+                background_color: "green"
+                on_press: root.train_ete()
+  
+            Button:
+                id: button_train_screen
+                size_hint: 0.25,1
+                font_size: 20
+                text: 'Train'
+                on_press: 
+                    print("Train control")
+                    root.manager.current = 'train'
+           
+            Button:
+                id: button_settings_screen
+                size_hint: 0.25,1
+                font_size: 20
+                text: 'Settings'
+                on_press: 
+                    print("Settings")
+                    root.manager.current = 'settings'
+
+            Button:
+                id: button_stop
+                size_hint: 0.25,1
+                font_size: 20
+                text: '! STOP !'
+                color: "black"
+                background_color: "red"
+                on_press: root.train_stop()
+                on_release: print("Stop released")
+                on_state:
+                    print("STOP current state is {}".format(self.state))
+
+
+<Train_Screen>:
+    buttonBack: button_back
+    buttonStop: button_stop
+    semafor: semafor
+#    train_status: train_status
+#    train_distance: train_distance
+    Widget:
+        Label:
             font_size: 20
-            size_hint: 0.25,1
-            text: 'End to End'
-            background_color: "green"
-#            on_touch_down: if self.collide_point(640 - touch.pos[0],480 - touch.pos[1]):
+            x: 0
+            y: root.height - self.height
+            text: "RPiVlak 1.0 - Direct train control"
+            size: self.texture_size
+        Label:
+            font_size: 12
+            x: root.width - self.width
+            y: 0
+            text: "© 2021 Tom Bartulec"
+            size: self.texture_size
 
-            on_press: root.train_ete()
-            on_release: print("End release")
-            on_state:
-                print("End_to_end current state is {}".format(self.state))
- 
-        Button:
-            size_hint: 0.25,1
+
+        Semafor:
+            id: semafor
+            right: root.right - 20
+            top: root.top - 20
+
+        GridLayout:
+            cols: 2
+            y: 20
+            id: button_grid
+            size_hint_y: None
+            spacing: 40,70
+            height: 70
+            width: root.width
+            size_hint: [.9, .9]
+
+            Button:
+                id: button_back
+                size_hint: 0.25,1
+                font_size: 20
+                text: 'Back'
+                on_press: 
+                    print("Back")
+                    root.manager.current = 'main'
+
+            Button:
+                id: button_stop
+                size_hint: 0.25,1
+                font_size: 20
+                text: '! STOP !'
+                color: "black"
+                background_color: "red"
+                on_press: root.train_stop()
+
+
+<Settings_Screen>:
+    buttonBack: button_back
+    buttonStop: button_stop
+    semafor: semafor
+#    train_status: train_status
+#    train_distance: train_distance
+    Widget:
+        Label:
             font_size: 20
-            text: 'Go'
-#            on_touch_down: if self.collide_point(640 - touch.pos[0],480 - touch.pos[1]):
-            on_press: print("Go")
-            on_release: print("ahhh")
-            on_state:
-                print("my current state is {}".format(self.state))
-
-        Button:
-            size_hint: 0.25,1
-            font_size: 20
-            text: 'Reverse'
-#            on_touch_down: if self.collide_point(640 - touch.pos[0],480 - touch.pos[1]):
-            on_press: print("reverse")
-            on_release: print("ahhh")
-            on_state:
-                print("my current state is {}".format(self.state))
+            x: 0
+            y: root.height - self.height
+            text: "RPiVlak 1.0 - Settings"
+            size: self.texture_size
+        Label:
+            font_size: 12
+            x: root.width - self.width
+            y: 0
+            text: "© 2021 Tom Bartulec"
+            size: self.texture_size
 
 
-        Button:
-            id: button_stop
-#            group: "jizda"
-#            state: "down"
-            size_hint: 0.25,1
-            font_size: 20
-            text: '! STOP !'
-            color: "black"
-            background_color: "red"
-#            on_touch_down: if self.collide_point(640 - touch.pos[0],480 - touch.pos[1]):
-            on_press: root.train_stop()
-            on_release: print("Stop released")
-            on_state:
-                print("STOP current state is {}".format(self.state))
+        Semafor:
+            id: semafor
+            right: root.right - 20
+            top: root.top - 20
+
+        GridLayout:
+            cols: 2
+            y: 20
+            id: button_grid
+            size_hint_y: None
+            spacing: 40,70
+            height: 70
+            width: root.width
+            size_hint: [.9, .9]
+
+            Button:
+                id: button_back
+                size_hint: 0.25,1
+                font_size: 20
+                text: 'Back'
+                on_press:
+                    print("Back")
+                    root.manager.current = 'main'
+
+            Button:
+                id: button_stop
+                size_hint: 0.25,1
+                font_size: 20
+                text: '! STOP !'
+                color: "black"
+                background_color: "red"
+                on_press: root.train_stop()
 
